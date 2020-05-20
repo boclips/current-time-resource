@@ -8,7 +8,8 @@ ADD resource/* /opt/resource/
 
 FROM core AS test
 RUN apk add \
-    make
+    make \
+    ncurses
 ADD Makefile /opt/
 ADD test/* /opt/test/
 WORKDIR /opt
