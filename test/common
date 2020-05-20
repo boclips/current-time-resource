@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -e
+
+it () {
+    echo "$@"
+}
+
+run () {
+    cmd="$cwd/../resource/$1"
+    input="$(json "$2")"
+    dir=$3
+    (
+    cd "$dir"
+    $cmd "$(resource_output_dir)" <<< "$input"
+    )
+}
+
+json () {
+    jq --null-input "$@"
+}
+
+assert_equal_json () {
+    lhs="$(json "$1")"
+    rhs="$(json "$2")"
+    assert_equal "$lhs" "$rhs"
+}
+
+green () {
+    echo "$(tput setaf 2)$*$(tput sgr0)"
+}
+
+red () {
+    echo "$(tput setaf 1)$*$(tput sgr0)"
+}
+
+assert_equal () {
+    if [ "$1" == "$2" ]
+    then
+        green "Test passed"
+        echo
+    else
+        red "Test failed"
+        echo
+        echo "Expected output:"
+        echo "$1"
+        echo
+        echo "Actual output:"
+        echo "$2"
+        echo
+        exit 1
+    fi
+}

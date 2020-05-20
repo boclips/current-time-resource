@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+payload="$(cat)"
+
+jq \
+    --null-input \
+    --argjson payload "$payload" \
+    '[ $payload | .source ]'
