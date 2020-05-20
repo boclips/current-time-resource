@@ -13,6 +13,7 @@ RUN apk add \
 ADD Makefile /opt/
 ADD test/* /opt/test/
 WORKDIR /opt
+ENV TERM=dumb
 RUN make test
 
 FROM core as release
