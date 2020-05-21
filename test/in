@@ -14,11 +14,7 @@ input="$(json '
         token: "test-string"
     },
     version: {
-         action: "export",
-         bitIds: [
-           "boclips._ui/badge@1.0.4"
-         ],
-         username: "remo1"
+        time: "1590070626"
     },
     params: {}
 }
@@ -34,24 +30,10 @@ it "emits the received version"
 assert_equal_json \
     '{
   version: {
-         action: "export",
-         bitIds: [
-           "boclips._ui/badge@1.0.4"
-         ],
-         username: "remo1"
+        time: "1590070626"
   },
   metadata: [
-    { name: "action", value: "export" },
-    { name: "username", value: "remo1" },
-    { name: "bitIds", value: [
-           "boclips._ui/badge@1.0.4"
-    ] }
+    { name: "time", value: "1590070626" }
   ]
 }' \
     "$output"
-
-it "writes the bitIds to disk"
-
-assert_equal_json \
-  '["boclips._ui/badge@1.0.4"]' \
-  "$(cat "$(resource_output_dir)/bitIds")"
