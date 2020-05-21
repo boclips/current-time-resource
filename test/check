@@ -8,23 +8,11 @@ source "$cwd/common"
 
 dir=$(mktemp -d -t test-check.XXXXXX)
 
-it "produces a version on first run"
-assert_equal_json \
-    '[ {
-         action: "export",
-         bitIds: [
-           "boclips._ui/badge@1.0.4"
-         ],
-         username: "remo1"
-       } ]' \
-    "$(run check '{
-        source: {
-            action: "export",
-             bitIds: [
-               "boclips._ui/badge@1.0.4"
-             ],
-             username: "remo1"
-        }
-    }' \
-    "$dir" \
-    2> "$dir/stderr")"
+it "produces the time as a version, so webhook is always triggered"
+
+time_before="$(date +%s)"
+check_result="$(run check '{source: {token: "123"}}' "$dir")"
+
+time="$(jq --exit-status --raw-output ".[0].time" <<< "$check_result" )"
+
+assert_gte "$time" "$time_before"

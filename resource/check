@@ -2,9 +2,10 @@
 
 set -e
 
-payload="$(cat)"
+time="$(date +%s)"
 
 jq \
+    --exit-status \
     --null-input \
-    --argjson payload "$payload" \
-    '[ $payload | .source ]'
+    --arg time "$time" \
+    '[ {time: $time} ]'
