@@ -1,3 +1,22 @@
 #!/usr/bin/env bash
 
 set -e
+
+destination=$1
+payload="$(cat)"
+
+jq \
+  '.version.bitIds' \
+  > "$destination/bitIds" \
+  <<< "$payload"
+
+jq \
+    '{
+      version: .version,
+      metadata: [
+        { name: "action", value: .version.action },
+        { name: "username", value: .version.username },
+        { name: "bitIds", value: .version.bitIds }
+    ]
+}' \
+  <<< "$payload"

@@ -2,3 +2,56 @@
 
 set -e
 
+cwd="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck disable=SC1090
+source "$cwd/common"
+
+dir=$(mktemp -d -t test-in.XXXXXX)
+
+input="$(json '
+{
+    source: {
+        token: "test-string"
+    },
+    version: {
+         action: "export",
+         bitIds: [
+           "boclips._ui/badge@1.0.4"
+         ],
+         username: "remo1"
+    },
+    params: {}
+}
+')"
+
+output="$(run in \
+    "$input" \
+    "$dir"
+    )"
+
+it "emits the received version"
+
+assert_equal_json \
+    '{
+  version: {
+         action: "export",
+         bitIds: [
+           "boclips._ui/badge@1.0.4"
+         ],
+         username: "remo1"
+  },
+  metadata: [
+    { name: "action", value: "export" },
+    { name: "username", value: "remo1" },
+    { name: "bitIds", value: [
+           "boclips._ui/badge@1.0.4"
+    ] }
+  ]
+}' \
+    "$output"
+
+it "writes the bitIds to disk"
+
+assert_equal_json \
+  '["boclips._ui/badge@1.0.4"]' \
+  "$(cat "$(resource_output_dir)/bitIds")"

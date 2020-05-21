@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 
 it () {
     echo "$@"
+}
+
+resource_output_dir () {
+    local dir=/tmp/bit-resource
+    mkdir --parents "$dir"
+    echo "$dir"
 }
 
 run () {
