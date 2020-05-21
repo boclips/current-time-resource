@@ -11,7 +11,7 @@ dir=$(mktemp -d -t test-check.XXXXXX)
 it "produces the time as a version, so webhook is always triggered"
 
 time_before="$(date +%s)"
-check_result="$(run check '{source: {token: "123"}}' "$dir")"
+check_result="$(run check '{source: {}}' "$dir")"
 
 time="$(jq --exit-status --raw-output ".[0].time" <<< "$check_result" )"
 

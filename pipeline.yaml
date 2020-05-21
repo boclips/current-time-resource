@@ -1,0 +1,61 @@
+---
+jobs:
+
+- name: build
+  plan:
+  - get: source
+  - put: version
+    params:
+      bump: minor
+  - put: dockerhub
+    params:
+      build: source
+      image: image/image.tar
+      additional_tags: version/version
+
+- name: playground
+  plan:
+  - get: test-webhook
+    trigger: true
+  - put: test-webhook
+
+resources:
+
+- name: source
+  type: git
+  icon: github-circle
+  source:
+    branch: master
+    uri: https://github.com/boclips/current-time-resource.git
+
+- name: test-webhook
+  type: current-time
+  source:
+  webhook_token: ((webhook.token))
+
+- name: version
+  type: semver
+  icon: github-circle
+  source:
+    driver: git
+    uri: git@github.com:boclips/versions.git
+    branch: master
+    file: docker-image-current-time-resource
+    private_key: ((versions.repo-key))
+
+- name: dockerhub
+  type: docker-image
+  icon: docker
+  source:
+    repository: boclipsconcourse/current-time-resource
+    username: boclipsconcourse
+    password: ((docker-hub.password))
+
+resource_types:
+
+- name: current-time
+  type: registry-image
+  source:
+    repository: boclipsconcourse/current-time-resource
+    tag: 0.1.0
+

@@ -7,7 +7,7 @@ it () {
 }
 
 resource_output_dir () {
-    local dir=/tmp/bit-resource
+    local dir=/tmp/current-time-resource
     mkdir --parents "$dir"
     echo "$dir"
 }

@@ -10,9 +10,7 @@ dir=$(mktemp -d -t test-in.XXXXXX)
 
 input="$(json '
 {
-    source: {
-        token: "test-string"
-    },
+    source: {},
     version: {
         time: "1590070626"
     },
